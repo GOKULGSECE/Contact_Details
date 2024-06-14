@@ -1,0 +1,17 @@
+{
+  "name": "contract_details",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Gokul",
+  "license": "ISC",
+  "dependencies": {
+    "antd": "^5.18.1",
+    "axios": "^1.7.2",
+    "react": "^18.3.1",
+    "react-router-dom": "^6.23.1"
+  }
+}
