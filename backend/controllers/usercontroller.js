@@ -2,6 +2,7 @@ const { message } = require('antd');
 const asyncHandler = require('express-async-handler');
 const users = require('../models/usermodels');
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken');
 
 const registerUser = asyncHandler(async(req,res)=>{
     const{username,email,password} = req.body;
@@ -23,11 +24,40 @@ const registerUser = asyncHandler(async(req,res)=>{
         password:hashpassword,
     });
     console.log(`user created: ${user_new}`)
+    if(contact)
+        {
+            res.status(202).json({user:user_new.username,email:user_new.email})
+        }
+        else{
+            res.status(400);
+            throw new Error("Try again")
+        }
     res.status(202).json({message:"user Registered"});
 })
 
 const LoginUser = asyncHandler(async(req,res)=>{
-    res.status(202).json({message:"Login Successfull"});
+    const{email,password} = req.body;
+    if(!email || !password)
+        {
+            res.status(400).json({message:"All fields are mandatory"});
+        }
+    const check = await users.findOne({email});
+    if(check&&(await bcrypt .compare(password,check.password))){
+        const accesstoken = jwt.sign({
+            check:{
+                username:check.username,
+                email:check.email,
+                id:check.id
+            }
+        },process.env.ACCESS_WEB_TOKEN,
+    {
+        expiresIn:"3m"
+    });
+        res.status(200).json({message:accesstoken});
+    }
+    else{
+        res.status(400).json({message:"Error while validation"})
+    }
 })
 
 const Currentinfo = asyncHandler(async(req,res)=>{

@@ -19,7 +19,8 @@ const createContacts = asyncHandler(async(req,res)=>{
             email,
             phoneno
         });
-        console.log(contact)
+        console.log(contact);
+        
     res.status(201).json(contact);
 });
 
