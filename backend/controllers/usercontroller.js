@@ -24,7 +24,7 @@ const registerUser = asyncHandler(async(req,res)=>{
         password:hashpassword,
     });
     console.log(`user created: ${user_new}`)
-    if(contact)
+    if(user_new)
         {
             res.status(202).json({user:user_new.username,email:user_new.email})
         }
@@ -32,7 +32,7 @@ const registerUser = asyncHandler(async(req,res)=>{
             res.status(400);
             throw new Error("Try again")
         }
-    res.status(202).json({message:"user Registered"});
+    // res.status(202).json({message:"user Registered"});
 })
 
 const LoginUser = asyncHandler(async(req,res)=>{
@@ -51,7 +51,7 @@ const LoginUser = asyncHandler(async(req,res)=>{
             }
         },process.env.ACCESS_WEB_TOKEN,
     {
-        expiresIn:"3m"
+        expiresIn:"10m"
     });
         res.status(200).json({message:accesstoken});
     }
@@ -61,7 +61,12 @@ const LoginUser = asyncHandler(async(req,res)=>{
 })
 
 const Currentinfo = asyncHandler(async(req,res)=>{
-    res.status(202).json({message:"Fetching the current info from the user"});
+    res.json(req.check);
 })
 
-module.exports = {registerUser,LoginUser,Currentinfo}
+const datafetch = asyncHandler(async(req,res)=>{
+    const user = await users.find();
+    res.json(user);
+})
+
+module.exports = {registerUser,LoginUser,Currentinfo,datafetch}

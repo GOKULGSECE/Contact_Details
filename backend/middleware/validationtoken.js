@@ -11,10 +11,17 @@ const validationtoken = asyncHandler(async(req,res,next)=>{
             jwt.verify(token, process.env.ACCESS_WEB_TOKEN,(err,decoded)=>{
                 if(err){
                     res.status(400);
-                    throw new Error("User not found or authorized");
+                    throw new Error("User not found or unauthorized");
                 }
+                req.check = decoded.check;
+                next();
                 console.log(decoded);
             })
+            if(!token)
+                {
+                    res.status(400);
+                    throw new Error("TOken is expired or unauthorized");
+                }
         }
 });
 
